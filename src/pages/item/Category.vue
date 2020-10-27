@@ -1,6 +1,6 @@
 <template>
   <v-card>
-      <v-flex xs12 sm10>
+      <v-flex xs12 sm12>
         <v-tree url="/item/category/list"
                 :isEdit="isEdit"
                 @handleAdd="handleAdd"
