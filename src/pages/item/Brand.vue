@@ -1,57 +1,59 @@
 <template>
-  <v-card>
-    <v-card-title>
-      <v-btn color="primary" @click="addBrand">新增品牌</v-btn>
-      <!--搜索框，与search属性关联-->
-      <v-spacer/>
-      <v-flex xs3>
-      <v-text-field label="输入关键字搜索" v-model.lazy="search" append-icon="search" hide-details/>
-      </v-flex>
-    </v-card-title>
-    <v-divider/>
-    <v-data-table
-      :headers="headers"
-      :items="brands"
-      :pagination.sync="pagination"
-      :total-items="totalBrands"
-      :loading="loading"
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.name }}</td>
-        <td class="text-xs-center">
-          <img v-if="props.item.image" :src="props.item.image" width="130" height="40">
-          <span v-else>无</span>
-        </td>
-        <td class="text-xs-center">{{ props.item.letter }}</td>
-        <td class="justify-center layout px-0">
-          <v-btn icon @click="editBrand(props.item)">
-            <i class="el-icon-edit"/>
-          </v-btn>
-          <v-btn icon @click="deleteBrand(props.item)">
-            <i class="el-icon-delete"/>
-          </v-btn>
-        </td>
-      </template>
-    </v-data-table>
-    <!--弹出的对话框-->
-    <v-dialog max-width="500" v-model="show" persistent scrollable>
-      <v-card>
-        <!--对话框的标题-->
-        <v-toolbar dense dark color="primary">
-          <v-toolbar-title>{{isEdit ? '修改' : '新增'}}品牌</v-toolbar-title>
-          <v-spacer/>
-          <!--关闭窗口的按钮-->
-          <v-btn icon @click="closeWindow"><v-icon>close</v-icon></v-btn>
-        </v-toolbar>
-        <!--对话框的内容，表单-->
-        <v-card-text class="px-5" style="height:400px">
-          <brand-form @close="closeWindow" :oldBrand="oldBrand" :isEdit="isEdit"/>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </v-card>
+  <div style="padding-left: 1%;padding-right: 1%">
+    <v-card>
+      <v-card-title>
+        <v-btn color="primary" @click="addBrand">新增品牌</v-btn>
+        <!--搜索框，与search属性关联-->
+        <v-spacer/>
+        <v-flex xs3>
+          <v-text-field label="输入关键字搜索" v-model.lazy="search" append-icon="search" hide-details/>
+        </v-flex>
+      </v-card-title>
+      <v-divider/>
+      <v-data-table
+        :headers="headers"
+        :items="brands"
+        :pagination.sync="pagination"
+        :total-items="totalBrands"
+        :loading="loading"
+        class="elevation-1"
+      >
+        <template slot="items" slot-scope="props">
+          <td class="text-xs-center">{{ props.item.id }}</td>
+          <td class="text-xs-center">{{ props.item.name }}</td>
+          <td class="text-xs-center">
+            <img v-if="props.item.image" :src="props.item.image" width="130" height="40">
+            <span v-else>无</span>
+          </td>
+          <td class="text-xs-center">{{ props.item.letter }}</td>
+          <td class="justify-center layout px-0">
+            <v-btn icon @click="editBrand(props.item)">
+              <i class="el-icon-edit"/>
+            </v-btn>
+            <v-btn icon @click="deleteBrand(props.item)">
+              <i class="el-icon-delete"/>
+            </v-btn>
+          </td>
+        </template>
+      </v-data-table>
+      <!--弹出的对话框-->
+      <v-dialog max-width="500" v-model="show" persistent scrollable>
+        <v-card>
+          <!--对话框的标题-->
+          <v-toolbar dense dark color="primary">
+            <v-toolbar-title>{{isEdit ? '修改' : '新增'}}品牌</v-toolbar-title>
+            <v-spacer/>
+            <!--关闭窗口的按钮-->
+            <v-btn icon @click="closeWindow"><v-icon>close</v-icon></v-btn>
+          </v-toolbar>
+          <!--对话框的内容，表单-->
+          <v-card-text class="px-5" style="height:400px">
+            <brand-form @close="closeWindow" :oldBrand="oldBrand" :isEdit="isEdit"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -84,6 +86,9 @@
       this.getDataFromServer();
     },
     watch: {
+      key(){
+        this.pagination.page = 1;
+      },
       pagination: { // 监视pagination属性的变化
         deep: true, // deep为true，会监视pagination的属性及属性中的对象属性变化
         handler() {

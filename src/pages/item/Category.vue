@@ -1,5 +1,7 @@
 <template>
-  <v-card>
+  <div style="padding-left: 1%;padding-right: 1%">
+
+    <v-card>
       <v-flex xs12 sm12>
         <v-tree url="/item/category/list"
                 :isEdit="isEdit"
@@ -9,7 +11,9 @@
                 @handleClick="handleClick"
         />
       </v-flex>
-  </v-card>
+    </v-card>
+  </div>
+
 </template>
 
 <script>
