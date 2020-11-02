@@ -128,6 +128,18 @@
         // 把oldBrand变为null
         this.oldBrand = null;
       },
+      deleteBrand(oldBrand) {
+        this.$http.delete('/item/brand',{
+          params: {	// 请求参数拼接在url上
+            bid: oldBrand.id
+          }
+        }).then(() => {
+          this.getDataFromServer(); //刷新表格
+          this.$message.success("删除成功！");
+        }).catch(() => {
+            this.$message.error("删除失败！");
+          });
+      },
       editBrand(oldBrand){
         // 根据品牌信息查询商品分类
         this.$http.get("/item/category/bid/" + oldBrand.id)
