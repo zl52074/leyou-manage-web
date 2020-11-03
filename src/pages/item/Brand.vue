@@ -30,7 +30,7 @@
             <v-btn icon @click="editBrand(props.item)">
               <i class="el-icon-edit"/>
             </v-btn>
-            <v-btn icon @click="delBtn(props.item)">
+            <v-btn icon @click="deleteBrand(props.item)">
               <i class="el-icon-delete"/>
             </v-btn>
           </td>
@@ -52,20 +52,21 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="showConfirm" max-width="290">
-        <v-card>
-          <v-card-title style="font-size: 16px;">是否删除</v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" small @click="showConfirm=false;deleteBrand(oldBrand)">
-              确认
-            </v-btn>
-            <v-btn small @click="showConfirm=false">
-              取消
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<!--      自己写的确认提示-->
+<!--      <v-dialog v-model="showConfirm" max-width="290">-->
+<!--        <v-card>-->
+<!--          <v-card-title style="font-size: 16px;">是否删除</v-card-title>-->
+<!--          <v-card-actions>-->
+<!--            <v-spacer></v-spacer>-->
+<!--            <v-btn color="primary" small @click="showConfirm=false;deleteBrand(oldBrand)">-->
+<!--              确认-->
+<!--            </v-btn>-->
+<!--            <v-btn small @click="showConfirm=false">-->
+<!--              取消-->
+<!--            </v-btn>-->
+<!--          </v-card-actions>-->
+<!--        </v-card>-->
+<!--      </v-dialog>-->
     </v-card>
   </div>
 </template>
@@ -142,22 +143,25 @@
         // 把oldBrand变为null
         this.oldBrand = null;
       },
-      delBtn(oldBrand){
-        this.showConfirm = true;
-        this.oldBrand = oldBrand;
-      },
+      //自己写的确认提示
+      // delBtn(oldBrand){
+      //   this.showConfirm = true;
+      //   this.oldBrand = oldBrand;
+      // },
       deleteBrand(oldBrand) {
-        console.log(this.oldBrand)
-        this.$http.delete('/item/brand',{
-          params: {	// 请求参数拼接在url上
-            bid: oldBrand.id
-          }
-        }).then(() => {
-          this.getDataFromServer(); //刷新表格
-          this.$message.success("删除成功！");
-        }).catch(() => {
-          this.$message.error("删除失败！");
-        });
+        this.$message.confirm("确认要删除品牌吗？")
+          .then(() => {
+            this.$http.delete('/item/brand',{
+              params: {	// 请求参数拼接在url上
+                bid: oldBrand.id
+              }
+            }).then(() => {
+              this.getDataFromServer(); //刷新表格
+              this.$message.success("删除成功！");
+            }).catch(() => {
+              this.$message.error("删除失败！");
+            });
+          })
       },
       editBrand(oldBrand){
         // 根据品牌信息查询商品分类
