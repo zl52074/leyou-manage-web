@@ -1,84 +1,86 @@
 <template>
-  <v-card>
-    <v-toolbar class="elevation-0">
-      <v-btn color="primary" @click="addGoods">新增商品</v-btn>
-      <v-spacer/>
-      <v-flex xs3>
-        状态：
-        <v-btn-toggle mandatory v-model.lazy="filter.saleable">
-          <v-btn flat>
-            全部
-          </v-btn>
-          <v-btn flat :value="true">
-            上架
-          </v-btn>
-          <v-btn flat :value="false">
-            下架
-          </v-btn>
-        </v-btn-toggle>
-      </v-flex>
-      <v-flex xs3>
-        <v-text-field
-          append-icon="search"
-          label="搜索"
-          single-line
-          hide-details
-          v-model="filter.search"
-        />
-      </v-flex>
-    </v-toolbar>
-    <v-divider/>
-    <v-data-table
-      :headers="headers"
-      :items="goodsList"
-      :pagination.sync="pagination"
-      :total-items="totalGoods"
-      :loading="loading"
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.title }}</td>
-        <td class="text-xs-center">{{props.item.cname}}</td>
-        <td class="text-xs-center">{{ props.item.bname }}</td>
-        <td class="justify-center layout px-0">
-          <v-btn icon @click="editGoods(props.item)">
-            <i class="el-icon-edit"/>
-          </v-btn>
-          <v-btn icon>
-            <i class="el-icon-delete"/>
-          </v-btn>
-          <v-btn icon v-if="props.item.saleable">下架</v-btn>
-          <v-btn icon v-else>上架</v-btn>
-        </td>
-      </template>
-    </v-data-table>
-    <!--弹出的对话框-->
-    <v-dialog max-width="800" v-model="show" persistent scrollable>
-      <v-card>
-        <!--对话框的标题-->
-        <v-toolbar dense dark color="primary">
-          <v-toolbar-title>{{isEdit ? '修改' : '新增'}}商品</v-toolbar-title>
-          <v-spacer/>
-          <!--关闭窗口的按钮-->
-          <v-btn icon @click="closeWindow">
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!--对话框的内容，表单-->
-        <v-card-text class="px-3" style="height: 600px">
-          <goods-form :oldGoods="oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit" ref="goodsForm"/>
-        </v-card-text>
-        <!--底部按钮，用来操作步骤线-->
-        <v-card-actions class="elevation-10">
-          <v-flex class="xs3 mx-auto">
-            <v-btn @click="previous" color="primary" :disabled="step === 1">上一步</v-btn>
-            <v-btn @click="next" color="primary" :disabled="step === 4">下一步</v-btn>
-          </v-flex>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-card>
+  <div style="padding-left: 1%;padding-right: 1%">
+    <v-card>
+      <v-toolbar class="elevation-0">
+        <v-btn color="primary" @click="addGoods">新增商品</v-btn>
+        <v-spacer/>
+        <v-flex xs3>
+          状态：
+          <v-btn-toggle mandatory v-model.lazy="filter.saleable">
+            <v-btn flat>
+              全部
+            </v-btn>
+            <v-btn flat :value="true">
+              上架
+            </v-btn>
+            <v-btn flat :value="false">
+              下架
+            </v-btn>
+          </v-btn-toggle>
+        </v-flex>
+        <v-flex xs3>
+          <v-text-field
+            append-icon="search"
+            label="搜索"
+            single-line
+            hide-details
+            v-model="filter.search"
+          />
+        </v-flex>
+      </v-toolbar>
+      <v-divider/>
+      <v-data-table
+        :headers="headers"
+        :items="goodsList"
+        :pagination.sync="pagination"
+        :total-items="totalGoods"
+        :loading="loading"
+        class="elevation-1"
+      >
+        <template slot="items" slot-scope="props">
+          <td class="text-xs-center">{{ props.item.id }}</td>
+          <td class="text-xs-center">{{ props.item.title }}</td>
+          <td class="text-xs-center">{{props.item.cname}}</td>
+          <td class="text-xs-center">{{ props.item.bname }}</td>
+          <td class="justify-center layout px-0">
+            <v-btn icon @click="editGoods(props.item)">
+              <i class="el-icon-edit"/>
+            </v-btn>
+            <v-btn icon>
+              <i class="el-icon-delete"/>
+            </v-btn>
+            <v-btn icon v-if="props.item.saleable">下架</v-btn>
+            <v-btn icon v-else>上架</v-btn>
+          </td>
+        </template>
+      </v-data-table>
+      <!--弹出的对话框-->
+      <v-dialog max-width="800" v-model="show" persistent scrollable>
+        <v-card>
+          <!--对话框的标题-->
+          <v-toolbar dense dark color="primary">
+            <v-toolbar-title>{{isEdit ? '修改' : '新增'}}商品</v-toolbar-title>
+            <v-spacer/>
+            <!--关闭窗口的按钮-->
+            <v-btn icon @click="closeWindow">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <!--对话框的内容，表单-->
+          <v-card-text class="px-3" style="height: 600px">
+            <goods-form :oldGoods="oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit" ref="goodsForm"/>
+          </v-card-text>
+          <!--底部按钮，用来操作步骤线-->
+          <v-card-actions class="elevation-10">
+            <v-flex class="xs3 mx-auto">
+              <v-btn @click="previous" color="primary" :disabled="step === 1">上一步</v-btn>
+              <v-btn @click="next" color="primary" :disabled="step === 4">下一步</v-btn>
+            </v-flex>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card>
+  </div>
 </template>
 
 <script>
