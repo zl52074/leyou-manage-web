@@ -146,6 +146,7 @@ export default {
           groupId: this.group.id,
           segments:[],
           numeric:false,
+          unit:"",
           searching:false,
           generic:false}
       this.show = true;
