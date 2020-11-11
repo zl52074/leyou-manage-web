@@ -46,11 +46,11 @@
             <v-btn icon @click="editGoods(props.item)">
               <i class="el-icon-edit"/>
             </v-btn>
-            <v-btn icon>
+            <v-btn icon @click="deleteGoods(props.item)">
               <i class="el-icon-delete"/>
             </v-btn>
-            <v-btn icon v-if="props.item.saleable">下架</v-btn>
-            <v-btn icon v-else>上架</v-btn>
+            <v-btn icon @click="switchSaleable(props.item)" v-if="props.item.saleable">下架</v-btn>
+            <v-btn icon @click="switchSaleable(props.item)" v-else>上架</v-btn>
           </td>
         </template>
       </v-data-table>
@@ -166,6 +166,36 @@
         this.show = true;
         // 获取要编辑的goods
         this.oldGoods = oldGoods;
+      },
+      deleteGoods(oldGoods){
+        console.log("delete")
+        this.$message.confirm("确认要删除品牌吗？")
+          .then(() => {
+            this.$http.delete('/item/goods',{
+              params: {	// 请求参数拼接在url上
+                spuId: oldGoods.id
+              }
+            }).then(() => {
+              this.getDataFromServer(); //刷新表格
+              this.$message.success("删除成功！");
+            }).catch(() => {
+              this.$message.error("删除失败！");
+            });
+          })
+      },
+      switchSaleable(oldGoods){
+        oldGoods.saleable = !oldGoods.saleable;
+        this.$http.put('/item/spu',oldGoods)
+          .then(() => {
+          this.getDataFromServer(); //刷新表格
+          if(oldGoods.saleable){
+            this.$message.success("已上架！");
+          }else{
+            this.$message.success("已下架！");
+          }
+        }).catch(() => {
+          this.$message.error("操作失败！");
+        });
       },
       closeWindow() {
         console.log(1)
